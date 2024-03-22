@@ -2,56 +2,21 @@
 """script that fetches info about a given employee using an api
 and exports it in csv format
 """
+import csv
 import json
 import requests
-import sys
+from sys import argv
 
+if __name__ == '__main__':
+    resp_users = requests.get('http://jsonplaceholder.typicode.com/users')
+    resp_todos = requests.get('https://jsonplaceholder.typicode.com/todos/')
 
-base_url = 'https://jsonplaceholder.typicode.com'
-
-if __name__ == "__main__":
-
-    user_id = sys.argv[1]
-
-    # get user info e.g https://jsonplaceholder.typicode.com/users/1/
-    user_url = '{}/users?id={}'.format(base_url, user_id)
-    # print("user url is: {}".format(user_url))
-
-    # get info from api
-    response = requests.get(user_url)
-    # pull data from api
-    data = response.text
-    # parse the data into JSON format
-    data = json.loads(data)
-    # extract user data, in this case, username of employee
-    user_name = data[0].get('username')
-    # print("id is: {}".format(user_id))
-    # print("name is: {}".format(user_name))
-
-    # get user info about todo tasks
-    # e.g https://jsonplaceholder.typicode.com/users/1/todos
-    tasks_url = '{}/todos?userId={}&_limit=5'.format(base_url, user_id)
-    # print("tasks url is: {}".format(tasks_url))
-
-    # get info from api
-    response = requests.get(tasks_url)
-    # pull data from api
-    tasks = response.text
-    # parse the data into JSON format
-    tasks = json.loads(tasks)
-
-    # build the csv
-    builder = ""
-    for task in tasks:
-        builder += '"{}","{}","{}","{}"\n'.format(
-            user_id,
-            user_name,
-            task['completed'],  # or use get method
-            task['title']
-        )
-    with open(file_name, mode='w', newline='') as f:
-        writer = csv.writer(f, quoting=csv.QUOTE_ALL)
-        for todo in todos:
-            writer.writerow(
-                [employee_id, user_name, todo['completed'], todo['title']]
-            )
+    for i in resp_users.json():
+        if i['id'] == int(argv[i]):
+            emp =i['username']
+    with open(f'{argv[1]}.csv','w') as f:
+        for i in resp_todos.json():
+            if i['userId'] == int(argv[1]):
+                c = i['completed']
+                t = i['title']
+                f.write(f"\"{argv[1]}\",\"{emp}\",\"{c}\",\"{t}\"\n")
