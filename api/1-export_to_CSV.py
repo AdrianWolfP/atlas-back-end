@@ -49,5 +49,9 @@ if __name__ == "__main__":
             task['completed'],  # or use get method
             task['title']
         )
-    with open('{}.csv'.format(user_id), 'w', encoding='UTF8') as myFile:
-        myFile.write(builder)
+    with open(file_name, mode='w', newline='') as f:
+        writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+        for todo in todos:
+            writer.writerow(
+                [employee_id, user_name, todo['completed'], todo['title']]
+            )
