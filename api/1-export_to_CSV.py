@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     for i in resp_users.json():
         if i['id'] == int(argv[i]):
-            emp =i['username']
-    with open(f'{argv[1]}.csv','w') as f:
+            emp = i['username']
+    with open(f'{argv[1]}.csv', 'w') as f:
         for i in resp_todos.json():
             if i['userId'] == int(argv[1]):
                 c = i['completed']
